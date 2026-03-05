@@ -12,12 +12,12 @@ export type BookEntry = {
     thumbnail_url: string;
 };
 
-// NDL API URL: https://ndlsearch.ndl.go.jp/api/opensearch?any=...
+// NDL API URL: https://ndlsearch.ndl.go.jp/api/opensearch?title=...
 export async function searchBooks(query: string): Promise<BookEntry[]> {
     if (!query.trim()) return [];
 
     try {
-        const url = `https://ndlsearch.ndl.go.jp/api/opensearch?any=${encodeURIComponent(query)}&cnt=10`;
+        const url = `https://ndlsearch.ndl.go.jp/api/opensearch?title=${encodeURIComponent(query)}&cnt=20`;
         const res = await fetch(url);
         const xmlData = await res.text();
 
