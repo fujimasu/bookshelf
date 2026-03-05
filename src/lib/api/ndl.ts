@@ -57,16 +57,16 @@ export async function searchBooks(query: string): Promise<BookEntry[]> {
                 const identifiers = Array.isArray(item["dc:identifier"]) ? item["dc:identifier"] : [item["dc:identifier"]];
                 const isbnObj = identifiers.find((id: any) => id["@_xsi:type"] === "dcndl:ISBN");
                 if (isbnObj) {
-                    isbn = typeof isbnObj === "string" ? isbnObj : isbnObj["#text"] || "";
+                    isbn = typeof isbnObj === "string" || typeof isbnObj === "number" ? String(isbnObj) : String(isbnObj["#text"] || "");
                 } else {
                     // Sometimes it's just a string if there's only one identifier
-                    const strId = identifiers.find((id: any) => typeof id === "string" && id.replace(/-/g, "").length >= 10);
-                    if (strId) isbn = strId;
+                    const strId = identifiers.find((id: any) => (typeof id === "string" || typeof id === "number") && String(id).replace(/-/g, "").length >= 10);
+                    if (strId) isbn = String(strId);
                 }
             }
 
             // Clean ISBN
-            isbn = isbn.replace(/-/g, "");
+            isbn = String(isbn).replace(/-/g, "");
 
             // Thumbnail URL
             let thumbnailUrl = "";
